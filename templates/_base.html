@@ -1,0 +1,13 @@
+<html>
+    <head>
+        {{if .Title}}
+        <title>{{.Title}} - blog</title>
+        {{else}}
+        <title>Welcome to blog!</title>
+        {{end}}
+    </head>
+    <body>
+        <div>Blog: <a href="/">Home</a></div>
+        {{template "content" .}}
+    </body>
+</html>
