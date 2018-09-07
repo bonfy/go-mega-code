@@ -1,8 +1,12 @@
 <html>
     <head>
-        <title>Home Page - Bonfy</title>
+        {{if .Title}}
+            <title>{{.Title}} - blog</title>
+        {{else}}
+            <title>Welcome to blog!</title>
+        {{end}}
     </head>
     <body>
-        <h1>Hello, {{.Username}}!</h1>
+        <h1>Hello, {{.User.Username}}!</h1>
     </body>
 </html>
