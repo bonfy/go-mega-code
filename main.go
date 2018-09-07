@@ -12,14 +12,14 @@ type User struct {
 
 // Post struct
 type Post struct {
-	User User
+	User
 	Body string
 }
 
 // IndexViewModel struct
 type IndexViewModel struct {
 	Title string
-	User  User
+	User
 	Posts []Post
 }
 

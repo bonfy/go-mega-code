@@ -7,9 +7,9 @@
         {{end}}
     </head>
     <body>
-        <h1>Hello, {{.User.Username}}!</h1>
+        <h1>Hello, {{.Username}}!</h1>
         {{range .Posts}}
-            <div><p>{{ .User.Username }} says: <b>{{ .Body }}</b></p></div>
+            <div><p>{{ .Username }} says: <b>{{ .Body }}</b></p></div>
         {{end}}
 
     </body>
