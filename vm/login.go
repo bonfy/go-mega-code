@@ -3,6 +3,12 @@ package vm
 // LoginViewModel struct
 type LoginViewModel struct {
 	BaseViewModel
+	Errs []string
+}
+
+// AddError func
+func (v *LoginViewModel) AddError(errs ...string) {
+	v.Errs = append(v.Errs, errs...)
 }
 
 // LoginViewModelOp strutc
