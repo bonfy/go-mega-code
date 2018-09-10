@@ -22,6 +22,6 @@ func (IndexViewModelOp) GetVM() IndexViewModel {
 		model.Post{User: u2, Body: "The Avengers movie was so cool!"},
 	}
 
-	vm := IndexViewModel{BaseViewModel{Title: "Homepage"}, u1, posts}
-	return vm
+	v := IndexViewModel{BaseViewModel{Title: "Homepage"}, u1, posts}
+	return v
 }
