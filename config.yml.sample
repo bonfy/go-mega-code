@@ -1,0 +1,6 @@
+mysql:
+  charset: utf8
+  db: dbname
+  host: localhost
+  password: password
+  user: root
