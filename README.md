@@ -2,6 +2,15 @@
 
 Source Code for [Go-Mega Tutorial](https://github.com/bonfy/go-mega)
 
+
+## Branch列表
+
+| Branch | Source Code | Zip |
+| :--- | :--- | :--- |
+| 01-Hello-World | [View](https://github.com/bonfy/go-mega-code/tree/01-Hello-World) | [Download](https://github.com/bonfy/go-mega-code/archive/v0.1.zip)|
+| 02-Template-Basic | [View](https://github.com/bonfy/go-mega-code/tree/02-Template)  | [Download](https://github.com/bonfy/go-mega-code/archive/v0.2.zip)|
+| 03-Template-Advance | [View](https://github.com/bonfy/go-mega-code/tree/03-Template-Advance) | [Download](https://github.com/bonfy/go-mega-code/archive/v0.3.zip) |
+
 ## 如何使用
 
 > 由于 Go 包的特殊引用方式， 最好将 code 都放到 $GOPATH/src/github.com/bonfy/go-mega-code 文件夹中再运行
@@ -65,14 +74,6 @@ $ go run main.go
 $ go run main.go
 ```
 
-
-## Branch列表
-
-| Branch | Source Code | Zip |
-| :--- | :--- | :--- |
-| 01-Hello-World | [View](https://github.com/bonfy/go-mega-code/tree/01-Hello-World) | [Download](https://github.com/bonfy/go-mega-code/archive/v0.1.zip)|
-| 02-Template-Basic | [View](https://github.com/bonfy/go-mega-code/tree/02-Template)  | [Download](https://github.com/bonfy/go-mega-code/archive/v0.2.zip)|
-| 03-Template-Advance | [View](https://github.com/bonfy/go-mega-code/tree/03-Template-Advance) | [Download](https://github.com/bonfy/go-mega-code/archive/v0.3.zip) |
 
 ## 支持我
 
