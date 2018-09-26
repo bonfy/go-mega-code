@@ -1,10 +1,13 @@
-# go-mega-code
+# Go-Mega Code
 
 Source Code for [Go-Mega Tutorial](https://github.com/bonfy/go-mega)
 
 ## 如何使用
 
-### 准备
+> 由于 Go 包的特殊引用方式， 最好将 code 都放到 $GOPATH/src/github.com/bonfy/go-mega-code 文件夹中再运行
+
+
+#### 准备
 
 请先安装 Go 环境，可以参考 [Prepare](https://go-mega.bonfy.im/00-prepare)
 
@@ -14,7 +17,7 @@ $ go version
 go version go1.11 darwin/amd64
 ```
 
-### Git 方式
+#### Git 方式
 
 ```cmd
 # 建立文件夹
@@ -35,7 +38,7 @@ $ git checkout 01-Hello-World
 $ go run main.go
 ```
 
-### Go Get 方式
+#### Go Get 方式
 
 ```cmd
 $ go get -v github.com/bonfy/go-mega-code
@@ -54,7 +57,7 @@ $ go run main.go
 
 ```
 
-###　Download Zip方式
+#### Download Zip方式
 
 下载每章的 zip，并解压，进入文件夹 运行 
 
@@ -63,11 +66,7 @@ $ go run main.go
 ```
 
 
-### 注意
-
-由于 Go 包的特殊引用方式， 最好将 code 都放到 $GOPATH/src/github.com/bonfy/go-mega-code 文件夹中再运行
-
-## branch zip
+## Branch列表
 
 | Branch | Source Code | Zip |
 | :--- | :--- | :--- |
