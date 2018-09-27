@@ -11,6 +11,7 @@
             Blog: 
             <a href="/">Home</a>
             {{if .CurrentUser}}
+            <a href="/user/{{.CurrentUser}}">Profile</a>
             <a href="/logout">Logout</a>
             {{else}}
             <a href="/login">Login</a>

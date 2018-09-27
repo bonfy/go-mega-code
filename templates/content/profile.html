@@ -1,0 +1,11 @@
+{{define "content"}}
+    <h1>User: {{.ProfileUser.Username}}</h1>
+    
+    <hr/>
+
+    {{range .Posts}}
+    <p>
+    {{ .User.Username }} says: <b>{{ .Body }}</b>
+    </p>
+    {{end}}
+{{end}}

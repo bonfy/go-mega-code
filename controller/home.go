@@ -1,19 +1,25 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/bonfy/go-mega-code/vm"
+	"github.com/gorilla/mux"
 )
 
 type home struct{}
 
 func (h home) registerRoutes() {
-	http.HandleFunc("/logout", middleAuth(logoutHandler))
-	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/register", registerHandler)
-	http.HandleFunc("/", middleAuth(indexHandler))
+	r := mux.NewRouter()
+	r.HandleFunc("/logout", middleAuth(logoutHandler))
+	r.HandleFunc("/login", loginHandler)
+	r.HandleFunc("/register", registerHandler)
+	r.HandleFunc("/user/{username}", middleAuth(profileHandler))
+	r.HandleFunc("/", middleAuth(indexHandler))
+
+	http.Handle("/", r)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -84,4 +90,19 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	clearSession(w, r)
 	http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+}
+
+func profileHandler(w http.ResponseWriter, r *http.Request) {
+	tpName := "profile.html"
+	vars := mux.Vars(r)
+	pUser := vars["username"]
+	sUser, _ := getSessionUser(r)
+	vop := vm.ProfileViewModelOp{}
+	v, err := vop.GetVM(sUser, pUser)
+	if err != nil {
+		msg := fmt.Sprintf("user ( %s ) does not exist", pUser)
+		w.Write([]byte(msg))
+		return
+	}
+	templates[tpName].Execute(w, &v)
 }
