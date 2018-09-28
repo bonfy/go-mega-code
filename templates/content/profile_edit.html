@@ -1,0 +1,17 @@
+{{define "content"}}
+    <h1>Profile Edit</h1>
+    <p>Username: {{.ProfileUser.Username}}</p>
+    <form action="/profile_edit" method="post" name="profile_edit">
+        <p>About Me</p>
+        <p><textarea  name="aboutme" rows="5" cols="80" value="" placeholder="about me">{{.ProfileUser.AboutMe}}</textarea></p>
+        <p><input type="submit" name="submit" value="Save"></p>
+    </form>
+
+    {{if .Errs}}
+    <ul>
+        {{range .Errs}}
+            <li>{{.}}</li>
+         {{end}}
+    </ul>
+    {{end}}
+{{end}}

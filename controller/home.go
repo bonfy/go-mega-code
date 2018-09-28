@@ -17,6 +17,7 @@ func (h home) registerRoutes() {
 	r.HandleFunc("/login", loginHandler)
 	r.HandleFunc("/register", registerHandler)
 	r.HandleFunc("/user/{username}", middleAuth(profileHandler))
+	r.HandleFunc("/profile_edit", middleAuth(profileEditHandler))
 	r.HandleFunc("/", middleAuth(indexHandler))
 
 	http.Handle("/", r)
@@ -105,4 +106,29 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	templates[tpName].Execute(w, &v)
+}
+
+func profileEditHandler(w http.ResponseWriter, r *http.Request) {
+	tpName := "profile_edit.html"
+	username, _ := getSessionUser(r)
+	vop := vm.ProfileEditViewModelOp{}
+	v := vop.GetVM(username)
+	if r.Method == http.MethodGet {
+		err := templates[tpName].Execute(w, &v)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		aboutme := r.Form.Get("aboutme")
+		log.Println(aboutme)
+		if err := vm.UpdateAboutMe(username, aboutme); err != nil {
+			log.Println("update Aboutme error:", err)
+			w.Write([]byte("Error update aboutme"))
+			return
+		}
+		http.Redirect(w, r, fmt.Sprintf("/user/%s", username), http.StatusSeeOther)
+	}
 }

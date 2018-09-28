@@ -64,3 +64,9 @@ func UpdateLastSeen(username string) error {
 	contents := map[string]interface{}{"last_seen": time.Now()}
 	return UpdateUserByUsername(username, contents)
 }
+
+// UpdateAboutMe func
+func UpdateAboutMe(username, text string) error {
+	contents := map[string]interface{}{"about_me": text}
+	return UpdateUserByUsername(username, contents)
+}
