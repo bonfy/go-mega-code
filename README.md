@@ -12,6 +12,8 @@ Source Code for [Go-Mega Tutorial](https://github.com/bonfy/go-mega)
 | 03-Template-Advance | [View](https://github.com/bonfy/go-mega-code/tree/03-Template-Advance) | [Download](https://github.com/bonfy/go-mega-code/archive/v0.3.zip) |
 | 04-Web-Form | [View](https://github.com/bonfy/go-mega-code/tree/04-Web-Form) |  [Download](https://github.com/bonfy/go-mega-code/archive/v0.4.zip) |
 | 05-Database | [View](https://github.com/bonfy/go-mega-code/tree/05-Database) |  [Download](https://github.com/bonfy/go-mega-code/archive/v0.5.zip) |
+| 06-User-Login | [View](https://github.com/bonfy/go-mega-code/tree/06-User-Login) |  [Download](https://github.com/bonfy/go-mega-code/archive/v0.6.zip) |
+
 ## 如何使用
 
 > 由于 Go 包的特殊引用方式， 最好将 code 都放到 $GOPATH/src/github.com/bonfy/go-mega-code 文件夹中再运行
