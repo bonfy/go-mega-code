@@ -49,3 +49,18 @@ func AddUser(username, password, email string) error {
 	user.SetAvatar(email)
 	return db.Create(&user).Error
 }
+
+// UpdateUserByUsername func
+func UpdateUserByUsername(username string, contents map[string]interface{}) error {
+	item, err := GetUserByUsername(username)
+	if err != nil {
+		return err
+	}
+	return db.Model(item).Updates(contents).Error
+}
+
+// UpdateLastSeen func
+func UpdateLastSeen(username string) error {
+	contents := map[string]interface{}{"last_seen": time.Now()}
+	return UpdateUserByUsername(username, contents)
+}

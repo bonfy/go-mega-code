@@ -3,7 +3,16 @@
     <table>
         <tr valign="top">
             <td><img src="{{.ProfileUser.Avatar}}&s=128"></td>
-            <td><h1>User: {{.ProfileUser.Username}}</h1></td>
+            <td>
+                <h1>User: {{.ProfileUser.Username}}</h1>
+                {{if .ProfileUser.AboutMe}}
+                    <p>{{ .ProfileUser.AboutMe }}</p>
+                {{end}}
+                
+                {{if .ProfileUser.LastSeen}}
+                    <p>Last seen on: {{ .ProfileUser.LastSeen }}</p>
+                {{end}}
+            </td>
         </tr>
     </table>
     
