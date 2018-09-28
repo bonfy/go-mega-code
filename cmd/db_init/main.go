@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/bonfy/go-mega-code/model"
@@ -20,6 +21,8 @@ func main() {
 		{
 			Username:     "bonfy",
 			PasswordHash: model.GeneratePasswordHash("abc123"),
+			Email:        "i@bonfy.im",
+			Avatar:       fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=identicon", model.Md5("i@bonfy.im")),
 			Posts: []model.Post{
 				{Body: "Beautiful day in Portland!"},
 			},
@@ -28,6 +31,7 @@ func main() {
 			Username:     "rene",
 			PasswordHash: model.GeneratePasswordHash("abc123"),
 			Email:        "rene@test.com",
+			Avatar:       fmt.Sprintf("https://www.gravatar.com/avatar/%s?d=identicon", model.Md5("rene@test.com")),
 			Posts: []model.Post{
 				{Body: "The Avengers movie was so cool!"},
 				{Body: "Sun shine is beautiful"},

@@ -1,11 +1,21 @@
 {{define "content"}}
-    <h1>User: {{.ProfileUser.Username}}</h1>
+
+    <table>
+        <tr valign="top">
+            <td><img src="{{.ProfileUser.Avatar}}&s=128"></td>
+            <td><h1>User: {{.ProfileUser.Username}}</h1></td>
+        </tr>
+    </table>
     
     <hr/>
 
     {{range .Posts}}
-    <p>
-    {{ .User.Username }} says: <b>{{ .Body }}</b>
-    </p>
+        <table>
+            <tr valign="top">
+                <td><img src="{{.User.Avatar}}&s=36"></td>
+                <td>{{ .User.Username }} says:<br>{{ .Body }}</td>
+            </tr>
+        </table>
     {{end}}
+
 {{end}}
