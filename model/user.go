@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -33,6 +34,86 @@ func (u *User) CheckPassword(password string) bool {
 	return GeneratePasswordHash(password) == u.PasswordHash
 }
 
+// Follow func
+// follow someone usr_id other.id follow_id u.id
+func (u *User) Follow(username string) error {
+	other, err := GetUserByUsername(username)
+	if err != nil {
+		return err
+	}
+	return db.Model(other).Association("Followers").Append(u).Error
+}
+
+// Unfollow func
+func (u *User) Unfollow(username string) error {
+	other, err := GetUserByUsername(username)
+	if err != nil {
+		return err
+	}
+	return db.Model(other).Association("Followers").Delete(u).Error
+}
+
+// FollowSelf func
+func (u *User) FollowSelf() error {
+	return db.Model(u).Association("Followers").Append(u).Error
+}
+
+// FollowersCount func
+func (u *User) FollowersCount() int {
+	return db.Model(u).Association("Followers").Count()
+}
+
+// FollowingIDs func
+func (u *User) FollowingIDs() []int {
+	var ids []int
+	rows, err := db.Table("follower").Where("follower_id = ?", u.ID).Select("user_id, follower_id").Rows()
+	if err != nil {
+		log.Println("Counting Following error:", err)
+		return ids
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id, followerID int
+		rows.Scan(&id, &followerID)
+		ids = append(ids, id)
+	}
+	return ids
+}
+
+// FollowingCount func
+func (u *User) FollowingCount() int {
+	ids := u.FollowingIDs()
+	return len(ids)
+}
+
+// FollowingPosts func
+func (u *User) FollowingPosts() (*[]Post, error) {
+	var posts []Post
+	ids := u.FollowingIDs()
+	if err := db.Preload("User").Order("timestamp desc").Where("user_id in (?)", ids).Find(&posts).Error; err != nil {
+		return nil, err
+	}
+	return &posts, nil
+}
+
+// IsFollowedByUser func
+func (u *User) IsFollowedByUser(username string) bool {
+	user, _ := GetUserByUsername(username)
+	ids := user.FollowingIDs()
+	for _, id := range ids {
+		if u.ID == id {
+			return true
+		}
+	}
+	return false
+}
+
+// CreatePost func
+func (u *User) CreatePost(body string) error {
+	post := Post{Body: body, UserID: u.ID}
+	return db.Create(&post).Error
+}
+
 // GetUserByUsername func
 func GetUserByUsername(username string) (*User, error) {
 	var user User
@@ -47,7 +128,10 @@ func AddUser(username, password, email string) error {
 	user := User{Username: username, Email: email}
 	user.SetPassword(password)
 	user.SetAvatar(email)
-	return db.Create(&user).Error
+	if err := db.Create(&user).Error; err != nil {
+		return err
+	}
+	return user.FollowSelf()
 }
 
 // UpdateUserByUsername func
