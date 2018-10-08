@@ -29,8 +29,27 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	tpName := "index.html"
 	vop := vm.IndexViewModelOp{}
 	username, _ := getSessionUser(r)
-	v := vop.GetVM(username)
-	templates[tpName].Execute(w, &v)
+	if r.Method == http.MethodGet {
+		flash := getFlash(w, r)
+		v := vop.GetVM(username, flash)
+		templates[tpName].Execute(w, &v)
+	}
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		body := r.Form.Get("body")
+		errMessage := checkLen("Post", body, 1, 180)
+		if errMessage != "" {
+			setFlash(w, r, errMessage)
+		} else {
+			err := vm.CreatePost(username, body)
+			if err != nil {
+				log.Println("add Post error:", err)
+				w.Write([]byte("Error insert Post in database"))
+				return
+			}
+		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {

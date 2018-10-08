@@ -1,7 +1,23 @@
 {{define "content"}}
     <h1>Hello, {{.CurrentUser}}!</h1>
 
+    <form action="/" method="post">
+        
+        <p><textarea  name="body" rows="3" cols="80" value="" placeholder="say something..."></textarea></p>
+        <p><input type="submit" name="submit" value="Post"></p>
+        
+        {{ if .Flash }}
+            <span style="color: red;">[{{.Flash}}]</span>
+        {{ end }}
+    </form>
+
+
     {{range .Posts}}
-        <div><p>{{ .User.Username }} says: <b>{{ .Body }}</b></p></div>
+        <table>
+            <tr valign="top">
+                <td><img src="{{.User.Avatar}}&s=36"></td>
+                <td>{{ .User.Username }} says:<br>{{ .Body }}</td>
+            </tr>
+        </table>
     {{end}}
 {{end}}
