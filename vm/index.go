@@ -7,16 +7,22 @@ type IndexViewModel struct {
 	BaseViewModel
 	Posts []model.Post
 	Flash string
+
+	BasePageViewModel
 }
 
 // IndexViewModelOp struct
 type IndexViewModelOp struct{}
 
 // GetVM func
-func (IndexViewModelOp) GetVM(username string, flash string) IndexViewModel {
+func (IndexViewModelOp) GetVM(username, flash string, page, limit int) IndexViewModel {
 	u, _ := model.GetUserByUsername(username)
-	posts, _ := u.FollowingPosts()
-	v := IndexViewModel{BaseViewModel{Title: "Homepage"}, *posts, flash}
+	posts, total, _ := u.FollowingPostsByPageAndLimit(page, limit)
+	v := IndexViewModel{}
+	v.SetTitle("Homepage")
+	v.Posts = *posts
+	v.Flash = flash
+	v.SetBasePageViewModel(total, page, limit)
 	v.SetCurrentUser(username)
 	return v
 }

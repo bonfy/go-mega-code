@@ -28,10 +28,11 @@ func (h home) registerRoutes() {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	tpName := "index.html"
 	vop := vm.IndexViewModelOp{}
+	page := getPage(r)
 	username, _ := getSessionUser(r)
 	if r.Method == http.MethodGet {
 		flash := getFlash(w, r)
-		v := vop.GetVM(username, flash)
+		v := vop.GetVM(username, flash, page, pageLimit)
 		templates[tpName].Execute(w, &v)
 	}
 	if r.Method == http.MethodPost {
@@ -119,8 +120,9 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pUser := vars["username"]
 	sUser, _ := getSessionUser(r)
+	page := getPage(r)
 	vop := vm.ProfileViewModelOp{}
-	v, err := vop.GetVM(sUser, pUser)
+	v, err := vop.GetVM(sUser, pUser, page, pageLimit)
 	if err != nil {
 		msg := fmt.Sprintf("user ( %s ) does not exist", pUser)
 		w.Write([]byte(msg))

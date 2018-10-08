@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 
 	"github.com/bonfy/go-mega-code/vm"
 )
@@ -191,4 +192,20 @@ func getFlash(w http.ResponseWriter, r *http.Request) string {
 	}
 	session.Save(r, w)
 	return fmt.Sprintf("%v", fm[0])
+}
+
+func getPage(r *http.Request) int {
+	url := r.URL         // net/url.URL
+	query := url.Query() // Values (map[string][]string)
+
+	q := query.Get("page")
+	if q == "" {
+		return 1
+	}
+
+	page, err := strconv.Atoi(q)
+	if err != nil {
+		return 1
+	}
+	return page
 }

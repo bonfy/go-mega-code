@@ -34,9 +34,16 @@
         <table>
             <tr valign="top">
                 <td><img src="{{.User.Avatar}}&s=36"></td>
-                <td>{{ .User.Username }} says:<br>{{ .Body }}</td>
+                <td><a href="/user/{{.User.Username}}">{{ .User.Username }}</a> says:<br>{{ .Body }}</td>
             </tr>
         </table>
     {{end}}
+
+    {{ if gt .PrevPage 0 }}
+        <a href="/user/{{.ProfileUser.Username}}?page={{.PrevPage}}">Newer posts</a>
+    {{ end }}
+    {{ if gt .NextPage 0 }}
+        <a href="/user/{{.ProfileUser.Username}}?page={{.NextPage}}">Older posts</a>
+    {{ end }}
 
 {{end}}

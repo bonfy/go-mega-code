@@ -96,6 +96,19 @@ func (u *User) FollowingPosts() (*[]Post, error) {
 	return &posts, nil
 }
 
+// FollowingPostsByPageAndLimit func
+func (u *User) FollowingPostsByPageAndLimit(page, limit int) (*[]Post, int, error) {
+	var total int
+	var posts []Post
+	offset := (page - 1) * limit
+	ids := u.FollowingIDs()
+	if err := db.Preload("User").Order("timestamp desc").Where("user_id in (?)", ids).Offset(offset).Limit(limit).Find(&posts).Error; err != nil {
+		return nil, total, err
+	}
+	db.Model(&Post{}).Where("user_id in (?)", ids).Count(&total)
+	return &posts, total, nil
+}
+
 // IsFollowedByUser func
 func (u *User) IsFollowedByUser(username string) bool {
 	user, _ := GetUserByUsername(username)
