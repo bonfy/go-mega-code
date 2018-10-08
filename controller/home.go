@@ -20,6 +20,7 @@ func (h home) registerRoutes() {
 	r.HandleFunc("/follow/{username}", middleAuth(followHandler))
 	r.HandleFunc("/unfollow/{username}", middleAuth(unFollowHandler))
 	r.HandleFunc("/profile_edit", middleAuth(profileEditHandler))
+	r.HandleFunc("/explore", middleAuth(exploreHandler))
 	r.HandleFunc("/", middleAuth(indexHandler))
 
 	http.Handle("/", r)
@@ -182,4 +183,13 @@ func unFollowHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, fmt.Sprintf("/user/%s", pUser), http.StatusSeeOther)
+}
+
+func exploreHandler(w http.ResponseWriter, r *http.Request) {
+	tpName := "explore.html"
+	vop := vm.ExploreViewModelOp{}
+	username, _ := getSessionUser(r)
+	page := getPage(r)
+	v := vop.GetVM(username, page, pageLimit)
+	templates[tpName].Execute(w, &v)
 }

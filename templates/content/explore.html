@@ -1,0 +1,19 @@
+{{define "content"}}
+    <h1>Hello, {{.CurrentUser}}!</h1>
+
+    {{range .Posts}}
+        <table>
+            <tr valign="top">
+                <td><img src="{{.User.Avatar}}&s=36"></td>
+                <td><a href="/user/{{.User.Username}}">{{ .User.Username }}</a> says:<br>{{ .Body }}</td>
+            </tr>
+        </table>
+    {{end}}
+
+    {{ if gt .PrevPage 0 }}
+        <a href="/explore?page={{.PrevPage}}">Newer posts</a>
+    {{ end }}
+    {{ if gt .NextPage 0 }}
+        <a href="/explore?page={{.NextPage}}">Older posts</a>
+    {{ end }}
+{{end}}
