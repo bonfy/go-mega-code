@@ -1,16 +1,20 @@
 package controller
 
 import (
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"strconv"
 
+	"github.com/bonfy/go-mega-code/config"
 	"github.com/bonfy/go-mega-code/vm"
+	gomail "gopkg.in/gomail.v2"
 )
 
 // PopulateTemplates func
@@ -208,4 +212,25 @@ func getPage(r *http.Request) int {
 		return 1
 	}
 	return page
+}
+
+// Email
+
+// sendEmail func
+func sendEmail(target, subject, content string) {
+	server, port, usr, pwd := config.GetSMTPConfig()
+	d := gomail.NewDialer(server, port, usr, pwd)
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", usr)
+	m.SetHeader("To", target)
+	m.SetAddressHeader("Cc", usr, "admin")
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", content)
+
+	if err := d.DialAndSend(m); err != nil {
+		log.Println("Email Error:", err)
+		return
+	}
 }

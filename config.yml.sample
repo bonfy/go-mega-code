@@ -4,3 +4,9 @@ mysql:
   host: localhost
   password: password
   user: root
+mail:
+  smtp: smtp-server
+  smtp-port: 587
+  user: user
+  password: pwd
+  
