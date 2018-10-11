@@ -135,8 +135,22 @@ func checkUserPassword(username, password string) string {
 }
 
 func checkUserExist(username string) string {
-	if !vm.CheckUserExist(username) {
+	if vm.CheckUserExist(username) {
 		return fmt.Sprintf("Username already exist, please choose another username")
+	}
+	return ""
+}
+
+func checkEmailExistRegister(email string) string {
+	if vm.CheckUserExist(email) {
+		return fmt.Sprintf("Email has registered by others, please choosse another email.")
+	}
+	return ""
+}
+
+func checkEmailExist(email string) string {
+	if !vm.CheckEmailExist(email) {
+		return fmt.Sprintf("Email does not register yet.Please Check email.")
 	}
 	return ""
 }
@@ -171,7 +185,32 @@ func checkRegister(username, email, pwd1, pwd2 string) []string {
 	if errCheck := checkEmail(email); len(errCheck) > 0 {
 		errs = append(errs, errCheck)
 	}
+	if errCheck := checkEmailExistRegister(email); len(errCheck) > 0 {
+		errs = append(errs, errCheck)
+	}
 	if errCheck := checkUserExist(username); len(errCheck) > 0 {
+		errs = append(errs, errCheck)
+	}
+	return errs
+}
+
+func checkResetPasswordRequest(email string) []string {
+	var errs []string
+	if errCheck := checkEmail(email); len(errCheck) > 0 {
+		errs = append(errs, errCheck)
+	}
+	if errCheck := checkEmailExist(email); len(errCheck) > 0 {
+		errs = append(errs, errCheck)
+	}
+	return errs
+}
+
+func checkResetPassword(pwd1, pwd2 string) []string {
+	var errs []string
+	if pwd1 != pwd2 {
+		errs = append(errs, "2 password does not match")
+	}
+	if errCheck := checkPassword(pwd1); len(errCheck) > 0 {
 		errs = append(errs, errCheck)
 	}
 	return errs

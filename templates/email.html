@@ -1,0 +1,13 @@
+<p>Dear {{.Username}},</p>
+<p>
+    To reset your password
+    <a href="{{.Server}}/reset_password/{{.Token}}">
+        click here
+    </a>
+</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{.Server}}/reset_password/{{.Token}}</p>
+<p>If you have not requested a password reset simply ignore this message.</p>
+<p>This Email will expire in 2 hours.</p>
+<p>Sincerely,</p>
+<p>BONFY</p>

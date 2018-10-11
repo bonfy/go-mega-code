@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 // User struct
@@ -127,10 +129,47 @@ func (u *User) CreatePost(body string) error {
 	return db.Create(&post).Error
 }
 
+// GenerateToken func
+func (u *User) GenerateToken() (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": u.Username,
+		"exp":      time.Now().Add(time.Hour * 2).Unix(), // 可以添加过期时间
+	})
+	return token.SignedString([]byte("secret"))
+}
+
+// CheckToken func
+func CheckToken(tokenString string) (string, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		return []byte("secret"), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims["username"].(string), nil
+	} else {
+		return "", err
+	}
+}
+
 // GetUserByUsername func
 func GetUserByUsername(username string) (*User, error) {
 	var user User
 	if err := db.Where("username=?", username).Find(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+// GetUserByEmail func
+func GetUserByEmail(email string) (*User, error) {
+	var user User
+	if err := db.Where("email=?", email).Find(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -165,5 +204,11 @@ func UpdateLastSeen(username string) error {
 // UpdateAboutMe func
 func UpdateAboutMe(username, text string) error {
 	contents := map[string]interface{}{"about_me": text}
+	return UpdateUserByUsername(username, contents)
+}
+
+// UpdatePassword func
+func UpdatePassword(username, password string) error {
+	contents := map[string]interface{}{"password_hash": Md5(password)}
 	return UpdateUserByUsername(username, contents)
 }

@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 
@@ -21,6 +23,7 @@ func (h home) registerRoutes() {
 	r.HandleFunc("/unfollow/{username}", middleAuth(unFollowHandler))
 	r.HandleFunc("/profile_edit", middleAuth(profileEditHandler))
 	r.HandleFunc("/explore", middleAuth(exploreHandler))
+	r.HandleFunc("/reset_password_request", resetPasswordRequestHandler)
 	r.HandleFunc("/", middleAuth(indexHandler))
 
 	http.Handle("/", r)
@@ -192,4 +195,41 @@ func exploreHandler(w http.ResponseWriter, r *http.Request) {
 	page := getPage(r)
 	v := vop.GetVM(username, page, pageLimit)
 	templates[tpName].Execute(w, &v)
+}
+
+func resetPasswordRequestHandler(w http.ResponseWriter, r *http.Request) {
+	tpName := "reset_password_request.html"
+	vop := vm.ResetPasswordRequestViewModelOp{}
+	v := vop.GetVM()
+
+	if r.Method == http.MethodGet {
+		templates[tpName].Execute(w, &v)
+	}
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		email := r.Form.Get("email")
+
+		errs := checkResetPasswordRequest(email)
+		v.AddError(errs...)
+
+		if len(v.Errs) > 0 {
+			templates[tpName].Execute(w, &v)
+
+		} else {
+			log.Println("Send mail to", email)
+			vopEmail := vm.EmailViewModelOp{}
+			vEmail := vopEmail.GetVM(email)
+			var contentByte bytes.Buffer
+			tpl, _ := template.ParseFiles("templates/email.html")
+
+			if err := tpl.Execute(&contentByte, &vEmail); err != nil {
+				log.Println("Get Parse Template:", err)
+				w.Write([]byte("Error send email"))
+				return
+			}
+			content := contentByte.String()
+			go sendEmail(email, "Reset Password", content)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		}
+	}
 }
