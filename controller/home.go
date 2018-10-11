@@ -24,6 +24,7 @@ func (h home) registerRoutes() {
 	r.HandleFunc("/profile_edit", middleAuth(profileEditHandler))
 	r.HandleFunc("/explore", middleAuth(exploreHandler))
 	r.HandleFunc("/reset_password_request", resetPasswordRequestHandler)
+	r.HandleFunc("/reset_password/{token}", resetPasswordHandler)
 	r.HandleFunc("/", middleAuth(indexHandler))
 
 	http.Handle("/", r)
@@ -229,6 +230,44 @@ func resetPasswordRequestHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			content := contentByte.String()
 			go sendEmail(email, "Reset Password", content)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		}
+	}
+}
+
+func resetPasswordHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	token := vars["token"]
+	username, err := vm.CheckToken(token)
+	if err != nil {
+		w.Write([]byte("The token is no longer valid, please go to the login page."))
+	}
+
+	tpName := "reset_password.html"
+	vop := vm.ResetPasswordViewModelOp{}
+	v := vop.GetVM(token)
+
+	if r.Method == http.MethodGet {
+		templates[tpName].Execute(w, &v)
+	}
+
+	if r.Method == http.MethodPost {
+		log.Println("Reset password for ", username)
+		r.ParseForm()
+		pwd1 := r.Form.Get("pwd1")
+		pwd2 := r.Form.Get("pwd2")
+
+		errs := checkResetPassword(pwd1, pwd2)
+		v.AddError(errs...)
+
+		if len(v.Errs) > 0 {
+			templates[tpName].Execute(w, &v)
+		} else {
+			if err := vm.ResetUserPassword(username, pwd1); err != nil {
+				log.Println("reset User password error:", err)
+				w.Write([]byte("Error update user password in database"))
+				return
+			}
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		}
 	}
