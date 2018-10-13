@@ -15,6 +15,8 @@ type home struct{}
 
 func (h home) registerRoutes() {
 	r := mux.NewRouter()
+	r.NotFoundHandler = http.HandlerFunc(notfoundHandler)
+
 	r.HandleFunc("/logout", middleAuth(logoutHandler))
 	r.HandleFunc("/login", loginHandler)
 	r.HandleFunc("/register", registerHandler)
@@ -25,6 +27,7 @@ func (h home) registerRoutes() {
 	r.HandleFunc("/explore", middleAuth(exploreHandler))
 	r.HandleFunc("/reset_password_request", resetPasswordRequestHandler)
 	r.HandleFunc("/reset_password/{token}", resetPasswordHandler)
+	r.HandleFunc("/404", notfoundHandler)
 	r.HandleFunc("/", middleAuth(indexHandler))
 
 	http.Handle("/", r)
@@ -130,7 +133,8 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	v, err := vop.GetVM(sUser, pUser, page, pageLimit)
 	if err != nil {
 		msg := fmt.Sprintf("user ( %s ) does not exist", pUser)
-		w.Write([]byte(msg))
+		setFlash(w, r, msg)
+		http.Redirect(w, r, "/404", http.StatusSeeOther)
 		return
 	}
 	templates[tpName].Execute(w, &v)
@@ -271,4 +275,11 @@ func resetPasswordHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		}
 	}
+}
+
+func notfoundHandler(w http.ResponseWriter, r *http.Request) {
+	flash := getFlash(w, r)
+	message := vm.NotFoundMessage{Flash: flash}
+	tpl, _ := template.ParseFiles("templates/404.html")
+	tpl.Execute(w, &message)
 }
