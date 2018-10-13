@@ -1,11 +1,11 @@
 {{define "content"}}
     <h1>Register</h1>
     <form action="/register" method="post" name="register">
-        <p><input type="text" name="username" value="" placeholder="Username"></p>
-        <p><input type="text" name="email" value="" placeholder="Email"></p>
-        <p><input type="password" name="pwd1" value="" placeholder="Password"></p>
-        <p><input type="password" name="pwd2" value="" placeholder="Password"></p>
-        <p><input type="submit" name="submit" value="Register"></p>
+        <p><input class="form-control" type="text" name="username" value="" placeholder="Username"></p>
+        <p><input class="form-control" type="text" name="email" value="" placeholder="Email"></p>
+        <p><input class="form-control" type="password" name="pwd1" value="" placeholder="Password"></p>
+        <p><input class="form-control" type="password" name="pwd2" value="" placeholder="Password"></p>
+        <p><input class="btn btn-outline-primary" type="submit" name="submit" value="Register"></p>
     </form>
 
     <p>Have account? <a href="/login">Click to Login!</a></p>

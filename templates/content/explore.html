@@ -2,18 +2,45 @@
     <h1>Hello, {{.CurrentUser}}!</h1>
 
     {{range .Posts}}
-        <table>
+        <table class="table table-hover">
             <tr valign="top">
-                <td><img src="{{.User.Avatar}}&s=36"></td>
+                <td width="36px"><img src="{{.User.Avatar}}&s=36"></td>
                 <td><a href="/user/{{.User.Username}}">{{ .User.Username }}</a> says:<br>{{ .Body }}</td>
             </tr>
         </table>
     {{end}}
 
-    {{ if gt .PrevPage 0 }}
-        <a href="/explore?page={{.PrevPage}}">Newer posts</a>
-    {{ end }}
-    {{ if gt .NextPage 0 }}
-        <a href="/explore?page={{.NextPage}}">Older posts</a>
-    {{ end }}
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+        {{ if gt .PrevPage 0 }}
+            <li class="page-item">
+                <a href="/explore?page={{.PrevPage}}">
+                    <span class="page-link" aria-hidden="true">&larr; Newer Posts</span>
+                </a>
+            </li>
+        {{ else }}
+            <li class="page-item disabled">
+                <a href="#">
+                    <span class="page-link" aria-hidden="true">&larr; Newer Posts</span>
+                </a>
+            </li> 
+        {{ end }}
+
+        {{ if gt .NextPage 0 }}
+            <li class="page-item">
+                <a href="/explore?page={{.NextPage}}">
+                    <span class="page-link" aria-hidden="true">Older Posts &rarr;</span>
+                </a>
+            </li>
+        {{ else }}
+            <li class="page-item disabled">
+                <a href="#">
+                    <span class="page-link" aria-hidden="true">Older Posts &rarr;</span>
+                </a>
+            </li> 
+        {{ end }}
+
+        </ul>
+    </nav>
+
 {{end}}

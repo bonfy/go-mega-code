@@ -5,20 +5,38 @@
         {{else}}
         <title>Welcome to blog!</title>
         {{end}}
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <style>
+            .container {
+                max-width: 960px;
+            }
+        </style>
+
     </head>
     <body>
-        <div>
-            Blog: 
-            <a href="/">Home</a>
-            <a href="/explore">Explore</a>
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+            <h5 class="my-0 mr-md-auto font-weight-normal">Blog</h5>
+            <nav class="my-2 my-md-0 mr-md-3">
+                <a class="p-2 text-dark" href="/">Home</a>
+                <a class="p-2 text-dark" href="/explore">Explore</a>
+                {{if .CurrentUser}}
+                    <a class="p-2 text-dark" href="/user/{{.CurrentUser}}">Profile</a>
+                {{end}}
+            </nav>
+
             {{if .CurrentUser}}
-            <a href="/user/{{.CurrentUser}}">Profile</a>
-            <a href="/logout">Logout</a>
+                <a class="btn btn-outline-primary" href="/logout">Logout</a>
             {{else}}
-            <a href="/login">Login</a>
+                <a class="btn btn-outline-primary" href="/login">Login</a>
             {{end}}
         </div>
 
-        {{template "content" .}}
+        <div class="container">
+            {{template "content" .}}
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     </body>
 </html>
