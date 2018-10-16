@@ -138,6 +138,11 @@ func (u *User) GenerateToken() (string, error) {
 	return token.SignedString([]byte("secret"))
 }
 
+// FormattedLastSeen func
+func (u *User) FormattedLastSeen() string {
+	return u.LastSeen.Format("2006-01-02 15:04:05")
+}
+
 // CheckToken func
 func CheckToken(tokenString string) (string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

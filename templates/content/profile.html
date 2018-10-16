@@ -10,7 +10,7 @@
                 {{end}}
                 
                 {{if .ProfileUser.LastSeen}}
-                    <p>Last seen on: {{ .ProfileUser.LastSeen }}</p>
+                    <p>Last seen on: {{ .ProfileUser.FormattedLastSeen }}</p>
                 {{end}}
 
                 <p>{{ .FollowersCount }} followers, {{ .FollowingCount }} following.</p>
