@@ -27,6 +27,7 @@ func (h home) registerRoutes() {
 	r.HandleFunc("/explore", middleAuth(exploreHandler))
 	r.HandleFunc("/reset_password_request", resetPasswordRequestHandler)
 	r.HandleFunc("/reset_password/{token}", resetPasswordHandler)
+	r.HandleFunc("/user/{username}/popup", popupHandler)
 	r.HandleFunc("/404", notfoundHandler)
 	r.HandleFunc("/", middleAuth(indexHandler))
 
@@ -275,6 +276,21 @@ func resetPasswordHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		}
 	}
+}
+
+func popupHandler(w http.ResponseWriter, r *http.Request) {
+	tpName := "popup.html"
+	vars := mux.Vars(r)
+	pUser := vars["username"]
+	sUser, _ := getSessionUser(r)
+	vop := vm.ProfileViewModelOp{}
+	v, err := vop.GetPopupVM(sUser, pUser)
+	if err != nil {
+		msg := fmt.Sprintf("user ( %s ) does not exist", pUser)
+		w.Write([]byte(msg))
+		return
+	}
+	templates[tpName].Execute(w, &v)
 }
 
 func notfoundHandler(w http.ResponseWriter, r *http.Request) {

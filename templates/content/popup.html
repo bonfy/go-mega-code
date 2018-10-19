@@ -1,0 +1,29 @@
+<table>
+    <tr valign="top">
+        <td width="64" style="border: 0px;"><img src="{{.ProfileUser.Avatar}}&s=64"></td>
+        <td style="border: 0px;">
+            <small>
+                <p><a href="/user/{{.ProfileUser.Username}}">{{.ProfileUser.Username}}</a></p>
+                {{if .ProfileUser.AboutMe}}
+                    <p>{{ .ProfileUser.AboutMe }}</p>
+                {{end}}
+                
+                {{if .ProfileUser.LastSeen}}
+                    <p>Last seen on: {{ .ProfileUser.FormattedLastSeen }}</p>
+                {{end}}
+
+                <p>{{ .FollowersCount }} followers, {{ .FollowingCount }} following.</p>
+
+                {{if .Editable}}
+                    <p><a href="/profile_edit">Edit your profile</a></p>
+                {{else}}
+                    {{if .IsFollow}}
+                        <p><a  class="btn btn-outline-primary" href="/unfollow/{{.ProfileUser.Username}}">Unfollow</a></p>
+                    {{else}}
+                        <p><a  class="btn btn-outline-primary" href="/follow/{{.ProfileUser.Username}}">Follow</a></p>
+                    {{end}}
+                {{end}}
+            </small>
+        </td>
+    </tr>
+</table>

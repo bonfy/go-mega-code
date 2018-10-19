@@ -40,6 +40,25 @@ func (ProfileViewModelOp) GetVM(sUser, pUser string, page, limit int) (ProfileVi
 	return v, nil
 }
 
+// GetPopupVM func
+func (ProfileViewModelOp) GetPopupVM(sUser, pUser string) (ProfileViewModel, error) {
+	v := ProfileViewModel{}
+	v.SetTitle("Profile")
+	u, err := model.GetUserByUsername(pUser)
+	if err != nil {
+		return v, err
+	}
+	v.ProfileUser = *u
+	v.Editable = (sUser == pUser)
+	if !v.Editable {
+		v.IsFollow = u.IsFollowedByUser(sUser)
+	}
+	v.FollowersCount = u.FollowersCount()
+	v.FollowingCount = u.FollowingCount()
+	v.SetCurrentUser(sUser)
+	return v, nil
+}
+
 // Follow func : A follow B
 func Follow(a, b string) error {
 	u, err := model.GetUserByUsername(a)
