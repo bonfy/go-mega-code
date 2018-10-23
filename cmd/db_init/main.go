@@ -5,6 +5,7 @@ import (
 
 	"github.com/bonfy/go-mega-code/model"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func main() {
