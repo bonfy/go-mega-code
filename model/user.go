@@ -23,7 +23,7 @@ func (u *User) CheckPassword(password string) bool {
 // GetUserByUsername func
 func GetUserByUsername(username string) (*User, error) {
 	var user User
-	if err := db.Where("username=?", username).Find(&user).Error; err != nil {
+	if err := db.Where("username=?", username).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
